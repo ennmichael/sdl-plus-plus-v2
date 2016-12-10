@@ -17,7 +17,7 @@ namespace Sdl
         Control(Uint32 = SDL_INIT_EVERYTHING);
         ~Control() noexcept;
         
-        // No copying allowed
+        // No copying or moving allowed
         Control(const Control&) = delete;
         Control(Control&&) = delete;
         Control& operator=(const Control&) = delete;

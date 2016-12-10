@@ -19,7 +19,7 @@ namespace Sdl
     }
     
     Shared_texture load_texture(const std::string& name, 
-                                Unique_renderer& renderer)
+                                Unique_renderer& rend_point_pointerer)
     {
         auto surface = Unique_surface { SDL_LoadBMP(name.c_str()) };
         check_pointer(surface);
@@ -27,7 +27,7 @@ namespace Sdl
         auto result =
         Shared_texture 
         {
-            SDL_CreateTextureFromSurface(renderer.get(), 
+            SDL_CreateTextureFromSurface(rend_point_pointerer.get(), 
                                          surface.get()),
             Texture_deleter { }
         };

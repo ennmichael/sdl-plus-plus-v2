@@ -28,19 +28,37 @@ namespace Sdl
     
     template <class T1, class T2>
     bool operator==(const Basic_point<T1>&, const Basic_point<T2>&);
-    template <class T1, class T2, class TR>
-    auto operator+=(Basic_point<T1>& lhs, const Basic_point<T2>& rhs)
-        -> Basic_point<decltype(lhs.x + rhs.x)>;
+    
+    template <class T1, class T2>
+    Basic_point<T1>& operator+=(Basic_point<T1>& lhs, 
+                                const Basic_point<T2>& rhs);
     template <class T1, class T2>
     auto operator+(
         const Basic_point<T1>& lhs, 
         const Basic_point<T2>& rhs) -> Basic_point<decltype(lhs.x + rhs.x)>;
+        
+    template <class T1, class T2>
+    Basic_point<T1>& operator-=(Basic_point<T1>& lhs, 
+                                const Basic_point<T2>& rhs);
+    template <class T1, class T2>
+    auto operator-(
+        const Basic_point<T1>& lhs, 
+        const Basic_point<T2>& rhs) -> Basic_point<decltype(lhs.x + rhs.x)>;
+        
+    template <class T1, class T2>
+    Basic_point<T1>& operator*=(Basic_point<T1>& lhs, 
+                                const Basic_point<T2>& rhs);
+    template <class T1, class T2>
+    auto operator*(
+        const Basic_point<T1>& lhs, 
+        const Basic_point<T2>& rhs) 
+            -> Basic_point<decltype(lhs.x * rhs.x)>;
     
-    SDL_Color color_red(Uint8 = 255, Uint8 alpha = 255) noexcept;
-    SDL_Color color_green(Uint8 = 255, Uint8 alpha = 255) noexcept;
-    SDL_Color color_blue(Uint8 = 255, Uint8 alpha = 255) noexcept;
-    SDL_Color color_black(Uint8 alpha = 255) noexcept;
-    SDL_Color color_white(Uint8 alpha = 255) noexcept;
+    constexpr SDL_Color color_red(Uint8 = 255, Uint8 alpha = 255) noexcept;
+    constexpr SDL_Color color_green(Uint8 = 255, Uint8 alpha = 255) noexcept;
+    constexpr SDL_Color color_blue(Uint8 = 255, Uint8 alpha = 255) noexcept;
+    constexpr SDL_Color color_black(Uint8 alpha = 255) noexcept;
+    constexpr SDL_Color color_white(Uint8 alpha = 255) noexcept;
     
     SDL_Rect make_rect(Sdl::Point, Sdl::Point) noexcept;
     SDL_Rect make_rect(Sdl::Point, int w, int h) noexcept;
@@ -48,7 +66,9 @@ namespace Sdl
     struct Screen_properties { // Properties of a window
         int width { 800 };
         int height { 600 };
-        Point position { SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED };
+        Point position { 
+            SDL_WINDOWPOS_UNDEFINED, 
+            SDL_WINDOWPOS_UNDEFINED };
         std::string title { };
     };
     
@@ -127,18 +147,80 @@ namespace Sdl
     }
     
     template <class T1, class T2>
-    auto operator+=(Basic_point<T1>& lhs, const Basic_point<T2>& rhs)
-        -> Basic_point<decltype(lhs.x + rhs.x)>
+    Basic_point<T1>& operator+=(Basic_point<T1>& lhs, const Basic_point<T2>& rhs)
     {
-        return { lhs.x + rhs.x, lhs.y + rhs.y };
-    }
+        lhs.x += rhs.x;
+        lhs.y += rhs.y;
         
+        return lhs;
+    }
+    
     template <class T1, class T2>
     auto operator+(
         const Basic_point<T1>& lhs, 
         const Basic_point<T2>& rhs) -> Basic_point<decltype(lhs.x + rhs.x)>
     {
         return { lhs.x + rhs.x, lhs.y + rhs.y };
+    }
+    
+    template <class T1, class T2>
+    Basic_point<T1>& operator-=(Basic_point<T1>& lhs, 
+                                const Basic_point<T2>& rhs)
+    {
+        lhs.x -= rhs.x;
+        lhs.y -= rhs.y;
+        
+        return lhs;
+    }
+    
+    template <class T1, class T2>
+    auto operator-(
+        const Basic_point<T1>& lhs, 
+        const Basic_point<T2>& rhs) -> Basic_point<decltype(lhs.x + rhs.x)>
+    {
+        return { lhs.x - rhs.x, lhs.y - rhs.y };
+    }
+    
+    template <class T1, class T2>
+    Basic_point<T1>& operator*=(Basic_point<T1>& lhs, 
+                                const Basic_point<T2>& rhs)
+    {
+        lhs.x *= rhs.x;
+        lhs.y *= lhs.y;
+        
+        return lhs;
+    }
+    
+    template <class T1, class T2>
+    auto operator*(const Basic_point<T1>& lhs, const Basic_point<T2>& rhs)
+        -> Basic_point<decltype(lhs.x * rhs.x)>
+    {
+        return { lhs.x * rhs.x, lhs.y * rhs.y };
+    }
+    
+    constexpr SDL_Color color_red(Uint8 amount, Uint8 alpha) noexcept
+    {
+        return { amount, 0, 0, alpha };
+    }
+    
+    constexpr SDL_Color color_green(Uint8 amount, Uint8 alpha) noexcept
+    {
+        return { 0, amount, 0, alpha };
+    }
+    
+    constexpr SDL_Color color_blue(Uint8 amount, Uint8 alpha) noexcept
+    {
+        return { 0, 0, amount, alpha };
+    }
+    
+    constexpr SDL_Color color_black(Uint8 alpha) noexcept
+    {
+        return { 0, 0, 0, alpha };
+    }
+    
+    constexpr SDL_Color color_white(Uint8 alpha) noexcept
+    {
+        return { 255, 255, 255, alpha };
     }
 }
 

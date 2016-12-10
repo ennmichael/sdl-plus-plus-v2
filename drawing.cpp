@@ -4,30 +4,8 @@
 
 namespace Sdl
 {
-    SDL_Color color_red(Uint8 amount, Uint8 alpha) noexcept
-    {
-        return { amount, 0, 0, alpha };
-    }
-    
-    SDL_Color color_green(Uint8 amount, Uint8 alpha) noexcept
-    {
-        return { 0, amount, 0, alpha };
-    }
-    
-    SDL_Color color_blue(Uint8 amount, Uint8 alpha) noexcept
-    {
-        return { 0, 0, amount, alpha };
-    }
-    
-    SDL_Color color_black(Uint8 alpha) noexcept
-    {
-        return { 0, 0, 0, alpha };
-    }
-    
-    SDL_Color color_white(Uint8 alpha) noexcept
-    {
-        return { 255, 255, 255, alpha };
-    }
+    // TODO fix passing unique pointer references around,
+    // start passing actual references to the required resources
     
     SDL_Rect make_rect(
         Sdl::Point upper_left, 
@@ -112,6 +90,9 @@ namespace Sdl
     Screen::Screen(const Screen_properties& properties)
         : m_canvas { properties }
     {
+        // TODO should this be here?
+        SDL_SetRenderDrawBlendMode(m_canvas.renderer.get(), 
+                                   SDL_BLENDMODE_BLEND);
     }
     
     void Screen::add_draw(const std::string& name, Point where)
