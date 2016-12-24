@@ -39,7 +39,7 @@ namespace Sdl
     Timer::Timer(std::chrono::milliseconds delay) noexcept
     {
         set_delay(delay);
-    };
+    }
     
     bool Timer::ready() noexcept
     {
