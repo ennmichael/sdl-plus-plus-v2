@@ -10,7 +10,7 @@ int main()
     
     try
     {
-        Control _ { }; // Control the SDL subsystems
+        Sdl_system_control _ { }; // Control the SDL subsystems
         
         Screen_properties props { }; // What our window will look like
         
@@ -21,7 +21,7 @@ int main()
         Screen scrn { props };
         Angle_rad angle { };
         
-        Main_loop ml 
+        Basic_loop ml 
         {
             [&scrn, &angle]()
             {
