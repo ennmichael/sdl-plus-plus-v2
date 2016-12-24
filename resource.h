@@ -12,16 +12,16 @@ namespace Sdl
         const char* what() const noexcept override;
     };
     
-    class Control {
+    class Sdl_system_control {
     public:
-        Control(Uint32 = SDL_INIT_EVERYTHING);
-        ~Control() noexcept;
+        Sdl_system_control(Uint32 = SDL_INIT_EVERYTHING);
+        ~Sdl_system_control() noexcept;
         
         // No copying or moving allowed
-        Control(const Control&) = delete;
-        Control(Control&&) = delete;
-        Control& operator=(const Control&) = delete;
-        Control& operator=(Control&&) = delete;
+        Sdl_system_control(const Sdl_system_control&) = delete;
+        Sdl_system_control(Sdl_system_control&&) = delete;
+        Sdl_system_control& operator=(const Sdl_system_control&) = delete;
+        Sdl_system_control& operator=(Sdl_system_control&&) = delete;
     };
     
     struct Window_deleter;

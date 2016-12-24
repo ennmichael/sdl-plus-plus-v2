@@ -21,10 +21,14 @@ namespace Sdl
     // More aliases like these?
     
     template <class T>
+    using Basic_point_vecot = std::vector<Basic_point<T>>;
+    using Point_vector = std::vector<Point>;
+    
+    template <class T>
     struct Basic_point { // A 2D point, as simple as they make them
         T x;
         T y;
-    };
+    }; // TODO Maybe this shouldn't be a template...
     
     template <class T1, class T2>
     bool operator==(const Basic_point<T1>&, const Basic_point<T2>&);
@@ -186,7 +190,7 @@ namespace Sdl
                                 const Basic_point<T2>& rhs)
     {
         lhs.x *= rhs.x;
-        lhs.y *= lhs.y;
+        lhs.y *= rhs.y;
         
         return lhs;
     }

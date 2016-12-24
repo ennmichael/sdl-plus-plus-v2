@@ -7,13 +7,13 @@ namespace Sdl
         return SDL_GetError();
     }
     
-    Control::Control(Uint32 flags)
+    Sdl_system_control::Sdl_system_control(Uint32 flags)
     {
         if (SDL_Init(flags) != 0)
             throw Sdl_exception { };
     }
     
-    Control::~Control() noexcept
+    Sdl_system_control::~Sdl_system_control() noexcept
     {
         SDL_Quit();
     }

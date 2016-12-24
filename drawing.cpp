@@ -53,7 +53,7 @@ namespace Sdl
          {
              static_cast<int>(std::sin(rads.value) * length + from.x),
              static_cast<int>(std::cos(rads.value) * length + from.y)
-         } // Points are integers in the SDL library, so narrowing
+         } // Sdl::Point_vector are integers in the SDL library, so narrowing
     {      // has to happen
     }
     
