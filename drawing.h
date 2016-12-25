@@ -9,6 +9,8 @@
 #include <map>
 #include <functional>
 
+// TODO I really need to clean this code up, and get rid of the template nonsense
+
 namespace Sdl
 {
     template <class T>
@@ -57,6 +59,20 @@ namespace Sdl
         const Basic_point<T1>& lhs, 
         const Basic_point<T2>& rhs) 
             -> Basic_point<decltype(lhs.x * rhs.x)>;
+    
+    enum class Message_box_type : Uint32 {
+        Basic = 0,
+        Error = SDL_MESSAGEBOX_ERROR,
+        Warning = SDL_MESSAGEBOX_WARNING,
+        Info = SDL_MESSAGEBOX_INFORMATION
+    };
+    
+    struct Message_content {
+        std::string title { };
+        std::string text { };
+    };
+    
+    void show_message(const Message_content&, Message_box_type);
     
     constexpr SDL_Color color_red(Uint8 = 255, Uint8 alpha = 255) noexcept;
     constexpr SDL_Color color_green(Uint8 = 255, Uint8 alpha = 255) noexcept;

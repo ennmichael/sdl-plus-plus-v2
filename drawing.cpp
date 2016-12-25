@@ -6,6 +6,16 @@ namespace Sdl
 {
     // TODO fix passing unique pointer references around,
     // start passing actual references to the required resources
+    void show_message(const Message_content& content, 
+                      Message_box_type type)
+    {
+        check_function(
+            SDL_ShowSimpleMessageBox(static_cast<Uint32>(type), 
+                                     content.title.c_str(), 
+                                     content.text.c_str(), 
+                                     nullptr)
+        );
+    }
     
     SDL_Rect make_rect(
         Sdl::Point upper_left, 
@@ -70,8 +80,10 @@ namespace Sdl
             load_texture(name.c_str(), renderer)
         };
         
-        SDL_QueryTexture(drawable.texture.get(), nullptr, nullptr,
-                         &drawable.width, &drawable.height);
+        check_function(
+            SDL_QueryTexture(drawable.texture.get(), nullptr, nullptr,
+                             &drawable.width, &drawable.height)
+        );
         
         m_map[name] = std::move(drawable);
     }
@@ -90,9 +102,10 @@ namespace Sdl
     Screen::Screen(const Screen_properties& properties)
         : m_canvas { properties }
     {
-        // TODO should this be here?
-        SDL_SetRenderDrawBlendMode(m_canvas.renderer.get(), 
-                                   SDL_BLENDMODE_BLEND);
+        check_function(
+            SDL_SetRenderDrawBlendMode(m_canvas.renderer.get(), 
+                                       SDL_BLENDMODE_BLEND)
+        );
     }
     
     void Screen::add_draw(const std::string& name, Point where)
