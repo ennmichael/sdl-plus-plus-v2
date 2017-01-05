@@ -1,5 +1,5 @@
-#ifndef _SDPP__DRAWING__HEADRER__
-#define _SDPP__DRAWING__HEADRER__
+#ifndef _SDLPP__DRAWING__HEADRER__
+#define _SDLPP__DRAWING__HEADRER__
 
 #include "SDL2/SDL.h"
 #include "resource.h"
@@ -13,55 +13,25 @@
 
 namespace Sdl
 {
-    template <class T>
-    struct Basic_point;
+    struct Point;
     struct Canvas;
     struct Line;
     
-    using Point = Basic_point<int>;
-    using Precise_point = Basic_point<double>;
-    // More aliases like these?
-    
-    template <class T>
-    using Basic_point_vecot = std::vector<Basic_point<T>>;
     using Point_vector = std::vector<Point>;
     
-    template <class T>
-    struct Basic_point { // A 2D point, as simple as they make them
-        T x;
-        T y;
+    struct Point { // A 2D point, as simple as they make them
+        int x;
+        int y;
     }; // TODO Maybe this shouldn't be a template...
     
-    template <class T1, class T2>
-    constexpr bool operator==(const Basic_point<T1>&, const Basic_point<T2>&);
-    
-    template <class T1, class T2>
-    constexpr bool operator!=(const Basic_point<T1>&, const Basic_point<T2>&);
-    
-    template <class T1, class T2>
-    constexpr Basic_point<T1>& operator+=(Basic_point<T1>& lhs, 
-                                const Basic_point<T2>& rhs);
-    template <class T1, class T2>
-    constexpr auto operator+(
-        const Basic_point<T1>& lhs, 
-        const Basic_point<T2>& rhs) -> Basic_point<decltype(lhs.x + rhs.x)>;
-        
-    template <class T1, class T2>
-    constexpr Basic_point<T1>& operator-=(Basic_point<T1>& lhs, 
-                                const Basic_point<T2>& rhs);
-    template <class T1, class T2>
-    constexpr auto operator-(
-        const Basic_point<T1>& lhs, 
-        const Basic_point<T2>& rhs) -> Basic_point<decltype(lhs.x + rhs.x)>;
-        
-    template <class T1, class T2>
-    constexpr Basic_point<T1>& operator*=(Basic_point<T1>& lhs, 
-                                const Basic_point<T2>& rhs);
-    template <class T1, class T2>
-    constexpr auto operator*(
-        const Basic_point<T1>& lhs, 
-        const Basic_point<T2>& rhs) 
-            -> Basic_point<decltype(lhs.x * rhs.x)>;
+    constexpr bool operator==(Point, Point) noexcept;
+    constexpr bool operator!=(Point, Point) noexcept;
+    constexpr Point& operator+=(Point& lhs, Point rhs) noexcept;
+    constexpr Point& operator-=(Point& lhs, Point rhs) noexcept;
+    constexpr Point& operator*=(Point& lhs, Point rhs) noexcept;
+    constexpr Point operator+(Point lhs, Point rhs) noexcept;
+    constexpr Point operator-(Point lhs, Point rhs) noexcept;
+    constexpr Point operator*(Point lhs, Point rhs) noexcept;
     
     enum class Message_box_type : Uint32 {
         Basic = 0,
@@ -96,8 +66,7 @@ namespace Sdl
         std::string title { };
     };
     
-    struct Canvas { // Canvas is what you need in order to draw something
-      // Should this class even exist?
+    struct Canvas { // A canvas is what you need in order to draw something
         Canvas() = default;
         explicit Canvas(const Screen_properties&); 
         // Creates a canvas based on the given window properties
@@ -139,7 +108,6 @@ namespace Sdl
         Filled, None
     };
     
-    // TODO update this class to use snapshots
     class Screen { // Manipulates a canvas
     public:
         explicit Screen(const Screen_properties&);
@@ -163,23 +131,19 @@ namespace Sdl
     
     // Basic_point operator definitions
     
-    template <class T1, class T2>
-    constexpr bool operator==(const Basic_point<T1>& lhs, const Basic_point<T2>& rhs)
+    constexpr bool operator==(Point lhs, Point rhs) noexcept
     {
         return lhs.x == rhs.x &&
                lhs.y == rhs.y;
     }
     
-    template <class T1, class T2>
-    constexpr bool operator!=(const Basic_point<T1>& lhs, const Basic_point<T2>& rhs)
+    constexpr bool operator!=(Point lhs, Point rhs) noexcept
     {
         return lhs.x != rhs.x &&
                lhs.y != rhs.y;
     }
     
-    template <class T1, class T2>
-    constexpr Basic_point<T1>& operator+=(
-        Basic_point<T1>& lhs, const Basic_point<T2>& rhs)
+    constexpr Point& operator+=(Point& lhs, Point rhs) noexcept
     {
         lhs.x += rhs.x;
         lhs.y += rhs.y;
@@ -187,17 +151,7 @@ namespace Sdl
         return lhs;
     }
     
-    template <class T1, class T2>
-    constexpr auto operator+(
-        const Basic_point<T1>& lhs, 
-        const Basic_point<T2>& rhs) -> Basic_point<decltype(lhs.x + rhs.x)>
-    {
-        return { lhs.x + rhs.x, lhs.y + rhs.y };
-    }
-    
-    template <class T1, class T2>
-    constexpr Basic_point<T1>& operator-=(Basic_point<T1>& lhs, 
-                                const Basic_point<T2>& rhs)
+    constexpr Point& operator-=(Point& lhs, Point rhs) noexcept
     {
         lhs.x -= rhs.x;
         lhs.y -= rhs.y;
@@ -205,17 +159,7 @@ namespace Sdl
         return lhs;
     }
     
-    template <class T1, class T2>
-    constexpr auto operator-(
-        const Basic_point<T1>& lhs, 
-        const Basic_point<T2>& rhs) -> Basic_point<decltype(lhs.x + rhs.x)>
-    {
-        return { lhs.x - rhs.x, lhs.y - rhs.y };
-    }
-    
-    template <class T1, class T2>
-    constexpr Basic_point<T1>& operator*=(Basic_point<T1>& lhs, 
-                                const Basic_point<T2>& rhs)
+    constexpr Point& operator*=(Point& lhs, Point rhs) noexcept
     {
         lhs.x *= rhs.x;
         lhs.y *= rhs.y;
@@ -223,9 +167,17 @@ namespace Sdl
         return lhs;
     }
     
-    template <class T1, class T2>
-    constexpr auto operator*(const Basic_point<T1>& lhs, const Basic_point<T2>& rhs)
-        -> Basic_point<decltype(lhs.x * rhs.x)>
+    constexpr Point operator+(Point lhs, Point rhs) noexcept
+    {
+        return { lhs.x + rhs.x, lhs.y + rhs.y };
+    }
+    
+    constexpr Point operator-(Point lhs, Point rhs) noexcept
+    {
+        return { lhs.x - rhs.x, lhs.y - rhs.y };
+    }
+    
+    constexpr Point operator*(Point lhs, Point rhs) noexcept
     {
         return { lhs.x * rhs.x, lhs.y * rhs.y };
     }
