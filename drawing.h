@@ -33,29 +33,32 @@ namespace Sdl
     }; // TODO Maybe this shouldn't be a template...
     
     template <class T1, class T2>
-    bool operator==(const Basic_point<T1>&, const Basic_point<T2>&);
+    constexpr bool operator==(const Basic_point<T1>&, const Basic_point<T2>&);
     
     template <class T1, class T2>
-    Basic_point<T1>& operator+=(Basic_point<T1>& lhs, 
+    constexpr bool operator!=(const Basic_point<T1>&, const Basic_point<T2>&);
+    
+    template <class T1, class T2>
+    constexpr Basic_point<T1>& operator+=(Basic_point<T1>& lhs, 
                                 const Basic_point<T2>& rhs);
     template <class T1, class T2>
-    auto operator+(
+    constexpr auto operator+(
         const Basic_point<T1>& lhs, 
         const Basic_point<T2>& rhs) -> Basic_point<decltype(lhs.x + rhs.x)>;
         
     template <class T1, class T2>
-    Basic_point<T1>& operator-=(Basic_point<T1>& lhs, 
+    constexpr Basic_point<T1>& operator-=(Basic_point<T1>& lhs, 
                                 const Basic_point<T2>& rhs);
     template <class T1, class T2>
-    auto operator-(
+    constexpr auto operator-(
         const Basic_point<T1>& lhs, 
         const Basic_point<T2>& rhs) -> Basic_point<decltype(lhs.x + rhs.x)>;
         
     template <class T1, class T2>
-    Basic_point<T1>& operator*=(Basic_point<T1>& lhs, 
+    constexpr Basic_point<T1>& operator*=(Basic_point<T1>& lhs, 
                                 const Basic_point<T2>& rhs);
     template <class T1, class T2>
-    auto operator*(
+    constexpr auto operator*(
         const Basic_point<T1>& lhs, 
         const Basic_point<T2>& rhs) 
             -> Basic_point<decltype(lhs.x * rhs.x)>;
@@ -77,6 +80,7 @@ namespace Sdl
     constexpr SDL_Color color_red(Uint8 = 255, Uint8 alpha = 255) noexcept;
     constexpr SDL_Color color_green(Uint8 = 255, Uint8 alpha = 255) noexcept;
     constexpr SDL_Color color_blue(Uint8 = 255, Uint8 alpha = 255) noexcept;
+    constexpr SDL_Color color_yellow(Uint8 = 255, Uint8 alpha = 255) noexcept;
     constexpr SDL_Color color_black(Uint8 alpha = 255) noexcept;
     constexpr SDL_Color color_white(Uint8 alpha = 255) noexcept;
     
@@ -160,14 +164,22 @@ namespace Sdl
     // Basic_point operator definitions
     
     template <class T1, class T2>
-    bool operator==(const Basic_point<T1>& lhs, const Basic_point<T2>& rhs)
+    constexpr bool operator==(const Basic_point<T1>& lhs, const Basic_point<T2>& rhs)
     {
         return lhs.x == rhs.x &&
                lhs.y == rhs.y;
     }
     
     template <class T1, class T2>
-    Basic_point<T1>& operator+=(Basic_point<T1>& lhs, const Basic_point<T2>& rhs)
+    constexpr bool operator!=(const Basic_point<T1>& lhs, const Basic_point<T2>& rhs)
+    {
+        return lhs.x != rhs.x &&
+               lhs.y != rhs.y;
+    }
+    
+    template <class T1, class T2>
+    constexpr Basic_point<T1>& operator+=(
+        Basic_point<T1>& lhs, const Basic_point<T2>& rhs)
     {
         lhs.x += rhs.x;
         lhs.y += rhs.y;
@@ -176,7 +188,7 @@ namespace Sdl
     }
     
     template <class T1, class T2>
-    auto operator+(
+    constexpr auto operator+(
         const Basic_point<T1>& lhs, 
         const Basic_point<T2>& rhs) -> Basic_point<decltype(lhs.x + rhs.x)>
     {
@@ -184,7 +196,7 @@ namespace Sdl
     }
     
     template <class T1, class T2>
-    Basic_point<T1>& operator-=(Basic_point<T1>& lhs, 
+    constexpr Basic_point<T1>& operator-=(Basic_point<T1>& lhs, 
                                 const Basic_point<T2>& rhs)
     {
         lhs.x -= rhs.x;
@@ -194,7 +206,7 @@ namespace Sdl
     }
     
     template <class T1, class T2>
-    auto operator-(
+    constexpr auto operator-(
         const Basic_point<T1>& lhs, 
         const Basic_point<T2>& rhs) -> Basic_point<decltype(lhs.x + rhs.x)>
     {
@@ -202,7 +214,7 @@ namespace Sdl
     }
     
     template <class T1, class T2>
-    Basic_point<T1>& operator*=(Basic_point<T1>& lhs, 
+    constexpr Basic_point<T1>& operator*=(Basic_point<T1>& lhs, 
                                 const Basic_point<T2>& rhs)
     {
         lhs.x *= rhs.x;
@@ -212,7 +224,7 @@ namespace Sdl
     }
     
     template <class T1, class T2>
-    auto operator*(const Basic_point<T1>& lhs, const Basic_point<T2>& rhs)
+    constexpr auto operator*(const Basic_point<T1>& lhs, const Basic_point<T2>& rhs)
         -> Basic_point<decltype(lhs.x * rhs.x)>
     {
         return { lhs.x * rhs.x, lhs.y * rhs.y };
@@ -231,6 +243,11 @@ namespace Sdl
     constexpr SDL_Color color_blue(Uint8 amount, Uint8 alpha) noexcept
     {
         return { 0, 0, amount, alpha };
+    }
+    
+    constexpr SDL_Color color_yellow(Uint8 amount, Uint8 alpha) noexcept
+    {
+        return {amount, amount, 0, alpha};
     }
     
     constexpr SDL_Color color_black(Uint8 alpha) noexcept
