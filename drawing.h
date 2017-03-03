@@ -1,5 +1,5 @@
-#ifndef _SDLPP__DRAWING__HEADRER__
-#define _SDLPP__DRAWING__HEADRER__
+#ifndef SDLPP__DRAWING__HEADRER_
+#define SDLPP__DRAWING__HEADRER_
 
 #include "SDL2/SDL.h"
 #include "resource.h"
@@ -8,9 +8,7 @@
 #include <utility>
 #include <map>
 #include <functional>
-
-// TODO I really need to clean this code up, and get rid of the template
-// nonsense
+#include <cmath>
 
 namespace Sdl {
 struct Point;
@@ -19,19 +17,22 @@ struct Line;
 
 using Point_vector = std::vector<Point>;
 
-struct Point {  // A 2D point, as simple as they make them
+struct Point {
     int x;
     int y;
-};  // TODO Maybe this shouldn't be a template...
+};
 
 constexpr bool operator==(Point, Point) noexcept;
 constexpr bool operator!=(Point, Point) noexcept;
 constexpr Point& operator+=(Point& lhs, Point rhs) noexcept;
 constexpr Point& operator-=(Point& lhs, Point rhs) noexcept;
 constexpr Point& operator*=(Point& lhs, Point rhs) noexcept;
+constexpr Point& operator/=(Point& lhs, Point rhs) noexcept;
 constexpr Point operator+(Point lhs, Point rhs) noexcept;
 constexpr Point operator-(Point lhs, Point rhs) noexcept;
 constexpr Point operator*(Point lhs, Point rhs) noexcept;
+constexpr Point operator/(Point lhs, Point rhs) noexcept;
+double distance(Point, Point) noexcept;
 
 enum class Message_box_type : Uint32 {
     Basic = 0,
@@ -132,7 +133,7 @@ constexpr bool operator==(Point lhs, Point rhs) noexcept {
 }
 
 constexpr bool operator!=(Point lhs, Point rhs) noexcept {
-    return lhs.x != rhs.x && lhs.y != rhs.y;
+    return !(lhs == rhs);
 }
 
 constexpr Point& operator+=(Point& lhs, Point rhs) noexcept {
@@ -156,6 +157,13 @@ constexpr Point& operator*=(Point& lhs, Point rhs) noexcept {
     return lhs;
 }
 
+constexpr Point& operator/=(Point& lhs, Point rhs) noexcept {
+    lhs.x /= rhs.x;
+    lhs.y /= rhs.y;
+
+    return lhs;
+}
+
 constexpr Point operator+(Point lhs, Point rhs) noexcept {
     return {lhs.x + rhs.x, lhs.y + rhs.y};
 }
@@ -166,6 +174,10 @@ constexpr Point operator-(Point lhs, Point rhs) noexcept {
 
 constexpr Point operator*(Point lhs, Point rhs) noexcept {
     return {lhs.x * rhs.x, lhs.y * rhs.y};
+}
+
+constexpr Point operator/(Point lhs, Point rhs) noexcept {
+    return {lhs.x / rhs.x, lhs.y / rhs.y};
 }
 
 constexpr SDL_Color color_red(Uint8 amount, Uint8 alpha) noexcept {
@@ -191,6 +203,19 @@ constexpr SDL_Color color_black(Uint8 alpha) noexcept {
 constexpr SDL_Color color_white(Uint8 alpha) noexcept {
     return {255, 255, 255, alpha};
 }
+}
+
+namespace std {
+    template <>
+    class hash<Sdl::Point> {
+    public:
+        std::size_t operator()(Sdl::Point p) const noexcept {
+            return int_hash_(p.x) ^ int_hash_(p.y);
+        }
+        
+    private:
+        std::hash<int> int_hash_{};
+    };
 }
 
 #endif

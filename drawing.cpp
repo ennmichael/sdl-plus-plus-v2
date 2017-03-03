@@ -3,6 +3,16 @@
 #include <iostream>
 
 namespace Sdl {
+double distance(Point p1, Point p2) noexcept {
+    auto diff = [](auto v1, auto v2) {
+        return std::abs(v1 - v2);
+    };
+    
+    return std::sqrt(
+        std::pow(diff(p1.x, p2.x), 2) + std::pow(diff(p1.y, p2.y), 2)
+    );
+}
+
 // TODO fix passing unique pointer references around,
 // start passing actual references to the required resources
 void show_message(const Message_content& content, Message_box_type type) {
@@ -100,10 +110,9 @@ void Screen::add_draw(SDL_Rect rect, SDL_Color color, Color_filling filling) {
         set_renderer_color(color);
 
         check_function(SDL_RenderDrawRect(m_canvas.renderer.get(), &rect));
-
-        // do check_function
+        
         if (filling == Color_filling::Filled) {
-            SDL_RenderFillRect(m_canvas.renderer.get(), &rect);
+            check_function(SDL_RenderFillRect(m_canvas.renderer.get(), &rect));
         }
     });
 }

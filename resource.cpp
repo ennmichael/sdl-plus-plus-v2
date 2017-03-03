@@ -1,4 +1,5 @@
 #include "resource.h"
+#include "SDL2/SDL_image.h"
 
 namespace Sdl {
 const char* Sdl_exception::what() const noexcept {
@@ -10,13 +11,13 @@ Sdl_system_control::Sdl_system_control(Uint32 flags) {
         throw Sdl_exception{};
 }
 
-Sdl_system_control::~Sdl_system_control() noexcept {
+Sdl_system_control::~Sdl_system_control() {
     SDL_Quit();
 }
 
 Shared_texture load_texture(const std::string& name,
                             Unique_renderer& rend_point_pointerer) {
-    auto surface = Unique_surface{SDL_LoadBMP(name.c_str())};
+    auto surface = Unique_surface{IMG_Load(name.c_str())};
     check_pointer(surface);
 
     auto result = Shared_texture{

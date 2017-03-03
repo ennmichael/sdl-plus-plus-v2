@@ -1,5 +1,5 @@
-#ifndef _SDLPP__RESOURCE__HEADER__
-#define _SDLPP__RESOURCE__HEADER__
+#ifndef SDLPP__RESOURCE__HEADER_
+#define SDLPP__RESOURCE__HEADER_
 
 #include "SDL2/SDL.h"
 #include <stdexcept>
@@ -14,7 +14,7 @@ class Sdl_exception : public std::exception {
 class Sdl_system_control {
    public:
     Sdl_system_control(Uint32 = SDL_INIT_EVERYTHING);
-    ~Sdl_system_control() noexcept;
+    ~Sdl_system_control();
 
     // No copying or moving allowed
     Sdl_system_control(const Sdl_system_control&) = delete;

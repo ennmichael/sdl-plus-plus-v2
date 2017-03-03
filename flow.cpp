@@ -6,6 +6,35 @@ bool key_down(SDL_Scancode scancode) {
     return SDL_GetKeyboardState(nullptr)[scancode];
 }
 
+void Mouse::update(const SDL_Event& event) {
+    update_position(event);
+    update_state(event);
+}
+
+Sdl::Point Mouse::position() const noexcept {
+    return pos_;
+}
+
+void Mouse::advance_just_pressed() noexcept {
+    replace_in_state<Just_pressed, Down>();
+}
+
+void Mouse::advance_just_released() noexcept {
+    replace_in_state<Just_released, Up>();
+}
+
+void Mouse::update_position(const SDL_Event& event) noexcept {
+    if (event.type != SDL_MOUSEMOTION) {
+        return;
+    }
+    pos_ = {event.motion.x, event.motion.y};
+}
+
+void Mouse::update_state(const SDL_Event& event) noexcept {
+    update_state_impl<Up, Just_released>(event, SDL_MOUSEBUTTONUP);
+    update_state_impl<Down, Just_pressed>(event, SDL_MOUSEBUTTONDOWN);
+}
+
 Basic_loop::Basic_loop(Function f) noexcept : m_f{f} {}
 
 void Basic_loop::start() {
@@ -46,11 +75,7 @@ void Thread_manager::add_graphics_thread(Graphics_init_function init,
 }
 
 void Thread_manager::add_thread(Thread_function f) {
-    threads_.push_back(std::thread{[f, this] {
-        while (!quit_) {
-            f();
-        }
-    }});
+    threads_.push_back(std::thread{f, std::cref(quit_)});
 }
 
 void Thread_manager::start_all() {
