@@ -86,7 +86,7 @@ enum class Event_result : bool { Quit, Continue };
 class Event_loop {
    public:
     using Event_function = std::function<Event_result(const SDL_Event&)>;
-    using Unconditional_function = std::function<void(void)>;
+    using Unconditional_function = std::function<void()>;
 
     Event_loop(Event_function, Unconditional_function) noexcept;
     void start();

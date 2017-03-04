@@ -22,17 +22,33 @@ struct Point {
     int y;
 };
 
+struct Size {  // TODO actually use this type 
+    int width; // in the library
+    int height;
+};
+
 constexpr bool operator==(Point, Point) noexcept;
 constexpr bool operator!=(Point, Point) noexcept;
-constexpr Point& operator+=(Point& lhs, Point rhs) noexcept;
-constexpr Point& operator-=(Point& lhs, Point rhs) noexcept;
-constexpr Point& operator*=(Point& lhs, Point rhs) noexcept;
-constexpr Point& operator/=(Point& lhs, Point rhs) noexcept;
-constexpr Point operator+(Point lhs, Point rhs) noexcept;
-constexpr Point operator-(Point lhs, Point rhs) noexcept;
-constexpr Point operator*(Point lhs, Point rhs) noexcept;
-constexpr Point operator/(Point lhs, Point rhs) noexcept;
+constexpr Point& operator+=(Point&, Point) noexcept;
+constexpr Point& operator-=(Point&, Point) noexcept;
+constexpr Point& operator*=(Point&, Point) noexcept;
+constexpr Point& operator/=(Point&, Point) noexcept;
+constexpr Point operator+(Point, Point) noexcept;
+constexpr Point operator-(Point, Point) noexcept;
+constexpr Point operator*(Point, Point) noexcept;
+constexpr Point operator/(Point, Point) noexcept;
 double distance(Point, Point) noexcept;
+
+constexpr bool operator==(Size, Size) noexcept;
+constexpr bool operator!=(Size, Size) noexcept;
+constexpr Size& operator+=(Size&, Size) noexcept;
+constexpr Size& operator-=(Size&, Size) noexcept;
+constexpr Size& operator*=(Size&, Size) noexcept;
+constexpr Size& operator/=(Size&, Size) noexcept;
+constexpr Size operator+(Size, Size) noexcept;
+constexpr Size operator-(Size, Size) noexcept;
+constexpr Size operator*(Size, Size) noexcept;
+constexpr Size operator/(Size, Size) noexcept;
 
 enum class Message_box_type : Uint32 {
     Basic = 0,
@@ -139,28 +155,24 @@ constexpr bool operator!=(Point lhs, Point rhs) noexcept {
 constexpr Point& operator+=(Point& lhs, Point rhs) noexcept {
     lhs.x += rhs.x;
     lhs.y += rhs.y;
-
     return lhs;
 }
 
 constexpr Point& operator-=(Point& lhs, Point rhs) noexcept {
     lhs.x -= rhs.x;
     lhs.y -= rhs.y;
-
     return lhs;
 }
 
 constexpr Point& operator*=(Point& lhs, Point rhs) noexcept {
     lhs.x *= rhs.x;
     lhs.y *= rhs.y;
-
     return lhs;
 }
 
 constexpr Point& operator/=(Point& lhs, Point rhs) noexcept {
     lhs.x /= rhs.x;
     lhs.y /= rhs.y;
-
     return lhs;
 }
 
@@ -178,6 +190,55 @@ constexpr Point operator*(Point lhs, Point rhs) noexcept {
 
 constexpr Point operator/(Point lhs, Point rhs) noexcept {
     return {lhs.x / rhs.x, lhs.y / rhs.y};
+}
+
+constexpr bool operator==(Size lhs, Size rhs) noexcept {
+    return lhs.width == rhs.width && 
+           lhs.height == rhs.height;
+}
+
+constexpr bool operator!=(Size lhs, Size rhs) noexcept {
+    return !(lhs == rhs);
+}
+
+constexpr Size& operator+=(Size& lhs, Size rhs) noexcept{
+    lhs.width += rhs.width;
+    lhs.height += rhs.height;
+    return lhs;
+}
+
+constexpr Size& operator-=(Size& lhs, Size rhs) noexcept {
+    lhs.width -= rhs.width;
+    lhs.height -= rhs.height;
+    return lhs;
+}
+
+constexpr Size& operator*=(Size& lhs, Size rhs) noexcept {
+    lhs.width *= rhs.width;
+    lhs.height *= rhs.height;
+    return lhs;
+}
+
+constexpr Size& operator/=(Size& lhs, Size rhs) noexcept {
+    lhs.width /= rhs.width;
+    lhs.height /= rhs.height;
+    return lhs;
+}
+
+constexpr Size operator+(Size lhs, Size rhs) noexcept {
+    return {lhs.width + rhs.width, lhs.height + rhs.height};
+}
+
+constexpr Size operator-(Size lhs, Size rhs) noexcept {
+    return {lhs.width - rhs.width, lhs.height - rhs.height};
+}
+
+constexpr Size operator*(Size lhs, Size rhs) noexcept {
+    return {lhs.width * rhs.width, lhs.height * rhs.height};
+}
+
+constexpr Size operator/(Size lhs, Size rhs) noexcept {
+    return {lhs.width / rhs.width, lhs.height / rhs.height};
 }
 
 constexpr SDL_Color color_red(Uint8 amount, Uint8 alpha) noexcept {
